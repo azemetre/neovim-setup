@@ -5,7 +5,8 @@
 
 Follow [installation instructions](https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim) prior to pulling `.vimrc`.
 
-After installing [Vim-Plug](https://github.com/junegunn/vim-plug) and copying `.vimrc` into your root directory. Open the file with the following command in your command line terminal:```
+After installing [Vim-Plug](https://github.com/junegunn/vim-plug) and copying `.vimrc` into your root directory. Open the file with the following command in your command line terminal:
+```
 $ vim .vimrc
 ```
 
