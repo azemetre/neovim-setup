@@ -16,3 +16,12 @@ While in your `.vimrc` file type in the following to install the vim plugins:
 ```
 
 Congrats! You've installed my `.vimrc` environment successfully on your machine.
+
+
+### to-dos
+- ~~commit my .vimrc~~
+- describe hot keys
+- justify why the settings and plugins were choosen
+- show screenshots of color palattes
+- write synopsis on why I use vim
+- group plugins by environment types (python, typescript + react + css, go support, etc)
