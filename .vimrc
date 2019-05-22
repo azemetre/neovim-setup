@@ -1,10 +1,9 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Awesome_version:
-"       Get this config, nice color schemes and lots of plugins!
+" Maintainer:
+"       Aaron Zemetres - @azemetre
 "
-"       Install the awesome version from:
-"
-"           https://github.com/amix/vimrc
+" Forked and Modified from:
+"       https://github.com/amix/vimrc
 "
 " Sections:
 "    -> General
@@ -21,6 +20,7 @@
 "    -> Spell checking
 "    -> Misc
 "    -> Helper functions
+"    -> Neovim Settings
 "    -> Plugin Specific Settings
 "    -> Vim-Plug
 "
@@ -199,6 +199,12 @@ set tw=500
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
+
+" shortcut to rapidly toggle `set list`
+" , + sc
+nmap <leader>sc :set list!<CR>
+
+set listchars=tab:▸\ ,eol:¬
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Filetypes and extension specifics 
@@ -407,6 +413,15 @@ endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Neovim Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has('python')
+	set pyx=2
+elseif has('python3')
+	set pyx=3
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin Specific Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ===> NERDTree
@@ -416,8 +431,6 @@ endfunction
 "replace C-g chars with no-break spaces
 let g:NERDTreeNodeDelimiter = "\u00a0"
 "nerdtree:hotkeys
-"Hot key to enable nerdtree commands
-let mapleader = ","
 "show hidden files
 let NERDTreeShowHidden=1
 "opens directory
@@ -430,6 +443,8 @@ nmap <leader>nc :NERDTreeClose<cr>
 nmap <leader>nx :NERDTreeFocus<cr>
 "find files, need directory path
 nmap <leader>nf :NERDTreeFind<cr>
+" ===> vim markdown
+let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript']
 " ===> Ale
 "ale:general
 "sign gutter open all times
@@ -438,56 +453,197 @@ let g:ale_sign_column_always = 1
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 "ale:javascript
-let g:ale_linters = {'javascript':['eslint']}
+let g:ale_linters = {}
+" ===> coc.nvim
+" if hidden is not set, TextEdit might fail.
+set hidden
+
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Vim-Plug - Package Manager - https://github.com/junegunn/vim-plug
+" => Vim Plug - Package Manager - https://github.com/junegunn/vim-plug
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
+"Neovim Specific Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Enhancements
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"coc latest release
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+"Asynchronous Lint Engine
+Plug 'w0rp/ale'
+"Tree explorer
+Plug 'scrooloose/nerdtree'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Tooling
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"high quality git wrapper
+Plug 'tpope/vim-fugitive'
 "Replacement for 95% of grep - plugin for the Perl module / CLI script 'ack'
 Plug 'mileszs/ack.vim'
 "Buffer Explorer / Browser
 Plug 'https://github.com/vim-scripts/bufexplorer.zip'
-"Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
-Plug 'ctrlpvim/ctrlp.vim'
+"fuzzy finder
+Plug '/usr/local/opt/fzf'
 "Distraction free writing - makes it easy to read or write documentation
 Plug 'junegunn/goyo.vim'
 "A light and configurable statusline/tabline
 Plug 'itchyny/lightline.vim'
-"Tree explorer
-Plug 'scrooloose/nerdtree'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Languages
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" language pack
+Plug 'sheerun/vim-polyglot'
+"markdown syntax
+Plug 'tpope/vim-markdown'
 "Emmet snippets
 Plug 'mattn/emmet-vim'
-"Manage most recently used (MRU) files
-Plug 'vim-scripts/mru.vim'
+"js indention and syntax support
+" Plug 'pangloss/vim-javascript'
+"React jsx syntax and indent support - depends on pangloss/vim-javascript
+" Plug 'mxw/vim-jsx'
+"Node.js support
+Plug 'moll/vim-node'
+" TypeScript support
+" Plug 'ianks/vim-tsx'
+"jsdoc support
+Plug 'heavenshell/vim-jsdoc'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text Editing and Navigation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"define and maintain consistent coding standards
+Plug 'editorconfig/editorconfig-vim'
 "Open file under cursor when pressing gf (if the text under the cursor is a path)
 Plug 'amix/open_file_under_cursor.vim'
 "Comment stuff out - gcc (comment out line) - gc (comment out target motion) - gcap (comment out paragraph)
 Plug 'tpope/vim-commentary'
-"Asynchronous Lint Engine
-Plug 'w0rp/ale'
-"visually select increasingly larger regions of text using the same key combination
-Plug 'terryma/vim-expand-region'
-"high quality git wrapper
-Plug 'tpope/vim-fugitive'
-"simple auto completion
-Plug 'ajh17/VimCompletesMe'
-"defines a new text object representing lines of code at the same indent level
-Plug 'michaeljsmith/vim-indent-object'
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 "yank and delete things without losing the text you yanked previously - turning your default register into a stack
 Plug 'maxbrunsfeld/vim-yankstack'
-"js indention and syntax support
-Plug 'pangloss/vim-javascript'
-"React jsx syntax and indent support - depends on pangloss/vim-javascript
-Plug 'mxw/vim-jsx'
-"Node.js support
-Plug 'moll/vim-node'
-"define and maintain consistent coding standards
-Plug 'editorconfig/editorconfig-vim'
-" TypeScript support
-Plug 'leafgarland/typescript-vim'
+"visually select increasingly larger regions of text using the same key combination
+Plug 'terryma/vim-expand-region'
+"Manage most recently used (MRU) files
+Plug 'vim-scripts/mru.vim'
+"defines a new text object representing lines of code at the same indent level
+Plug 'michaeljsmith/vim-indent-object'
 "Initialize plugin system
 call plug#end()
