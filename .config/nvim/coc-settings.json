@@ -1,0 +1,5 @@
+{
+    "languageserver": {},
+    "coc.preferences.colorSupport": true,
+    "tsserver.npm": "/usr/local/bin/npm"
+}
