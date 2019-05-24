@@ -33,9 +33,9 @@ Verify you have Node.js installed with the following command:
 
 If you're using [nvm](https://github.com/nvm-sh/nvm), it is highly recommended to have a global [Node.js](https://nodejs.org/en/) on your machine. In order to use [coc-tsserver](https://github.com/neoclide/coc-tsserver) you need to install the following node dependencies:
 
-[yarn](https://yarnpkg.com/en/)
-[neovim](https://github.com/neovim/node-client)
-[TypeScript](https://github.com/microsoft/TypeScript)
+* [yarn](https://yarnpkg.com/en/)
+* [neovim](https://github.com/neovim/node-client)
+* [TypeScript](https://github.com/microsoft/TypeScript)
 
 Prior to install global dependencies, please be sure to deactivate nvm with the following command:
 ```
