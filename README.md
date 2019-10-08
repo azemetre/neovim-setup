@@ -77,7 +77,7 @@ The output of the above command should go into the tsserver.npm property in your
 ```
 
 ## end game
-Congrats! You've installed my [neovim](https://nodejs.org/en/) + [configuration](https://github.com/azemetre/neovim-setup) successfully on your machine.
+Congrats! You've installed my [neovim](https://neovim.io/) + [configuration](https://github.com/azemetre/neovim-setup) successfully on your machine.
 
 
 ### to-dos
