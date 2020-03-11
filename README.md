@@ -1,5 +1,5 @@
 # my neovim setup
-
+test
 ## prerequisites
 ### [homebrew](https://brew.sh/)
 If you don't have homebrew installed for macOS, please install it with the following command:
