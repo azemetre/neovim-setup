@@ -42,6 +42,8 @@ filetype indent on
 
 " Set to auto read when a file is changed from the outside
 set autoread
+" Trigger autoread when changing buffers inside while inside vim:
+au FocusGained,BufEnter * :checktime
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
@@ -56,6 +58,12 @@ command W w !sudo tee % > /dev/null
 
 " delete, yank goes to OS clipboard
 set clipboard+=unnamedplus
+
+" enable persistent undo
+if has('persistent_undo')      "check if your vim version supports it
+  set undofile                 "turn on the feature
+  set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
+  endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -145,17 +153,20 @@ set foldcolumn=1
 "Enable syntax highlighting
 syntax enable 
 
+"Terminal colors
+set termguicolors
 "Enable 256 colors palette in Gnome Terminal
-if $COLORTERM == 'gnome-terminal'
-    set t_Co=256
-endif
+" if $COLORTERM == 'gnome-terminal'
+"     set t_Co=256
+" endif
 
-try
-    colorscheme default
-catch
-endtry
+" try
+"     colorscheme default
+" catch
+" endtry
 
 set background=dark
+
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -295,7 +306,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -418,9 +429,9 @@ endfunction
 " => Neovim Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has('python')
-	set pyx=2
+  set pyx=2
 elseif has('python3')
-	set pyx=3
+  set pyx=3
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -447,6 +458,17 @@ nmap <leader>nx :NERDTreeFocus<cr>
 nmap <leader>nf :NERDTreeFind<cr>
 " ===> vim markdown
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript']
+" ===> lightline
+let g:lightline = {
+      \ 'colorscheme': 'powerline',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 " ===> Ale
 "ale:general
 "sign gutter open all times
@@ -587,7 +609,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -606,6 +628,7 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Vim Plug - Package Manager - https://github.com/junegunn/vim-plug
@@ -628,27 +651,29 @@ Plug 'dstein64/vim-startuptime'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "high quality git wrapper
 Plug 'tpope/vim-fugitive'
+"quoting/parenthesizing/tagging made simple
+Plug 'tpope/vim-surround'
 "Replacement for 95% of grep - plugin for the Perl module / CLI script 'ack'
 Plug 'mileszs/ack.vim'
 "fuzzy finder
 Plug '/usr/local/opt/fzf'
 "A light and configurable statusline/tabline
 Plug 'itchyny/lightline.vim'
-" code formatter for javascript, typescript, css, less, scss, json, graphql, markdown, vue, yaml, html
+"code formatter for javascript, typescript, css, less, scss, json, graphql, markdown, vue, yaml, html
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+"(Do)cumentation (Ge)nerator
+Plug 'kkoomen/vim-doge'
+"markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Languages
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" language pack
+"language pack
 Plug 'sheerun/vim-polyglot'
 "markdown syntax
 Plug 'tpope/vim-markdown'
 "Emmet html && css snippets
 Plug 'mattn/emmet-vim'
-"Node.js support
-Plug 'moll/vim-node'
-"jsdoc support
-Plug 'heavenshell/vim-jsdoc'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text Editing and Navigation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -660,3 +685,4 @@ Plug 'tpope/vim-commentary'
 Plug 'vim-scripts/mru.vim'
 "Initialize plugin system
 call plug#end()
+
