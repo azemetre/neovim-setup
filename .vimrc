@@ -429,9 +429,9 @@ endfunction
 " => Neovim Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has('python')
-  set pyx=2
+	set pyx=2
 elseif has('python3')
-  set pyx=3
+    set pyx=3
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -655,6 +655,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 "Replacement for 95% of grep - plugin for the Perl module / CLI script 'ack'
 Plug 'mileszs/ack.vim'
+"vim fetch, open files at line and char numbers
+Plug 'wsdjeg/vim-fetch'
 "fuzzy finder
 Plug '/usr/local/opt/fzf'
 "A light and configurable statusline/tabline
@@ -685,4 +687,3 @@ Plug 'tpope/vim-commentary'
 Plug 'vim-scripts/mru.vim'
 "Initialize plugin system
 call plug#end()
-

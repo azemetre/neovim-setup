@@ -1,19 +1,19 @@
 {
   "dependencies": {
-    "coc-css": ">=1.2.3",
+    "coc-css": ">=1.2.4",
     "coc-emoji": ">=1.2.3",
     "coc-eslint": ">=1.2.7",
-    "coc-go": ">=0.8.0",
+    "coc-go": ">=0.10.0",
     "coc-highlight": ">=1.2.5",
     "coc-html": ">=1.2.4",
     "coc-json": ">=1.2.6",
     "coc-markdownlint": ">=1.5.0",
-    "coc-prettier": ">=1.1.14",
+    "coc-prettier": ">=1.1.17",
     "coc-rls": ">=1.1.6",
     "coc-snippets": ">=2.1.28",
     "coc-stylelint": ">=1.1.0",
-    "coc-tsserver": ">=1.5.2",
+    "coc-tsserver": ">=1.5.5",
     "coc-word": ">=1.2.2",
-    "coc-yaml": ">=1.0.4"
+    "coc-yaml": ">=1.0.5"
   }
 }
