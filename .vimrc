@@ -695,6 +695,8 @@ Plug 'ryanoasis/vim-devicons'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "high quality git wrapper
 Plug 'tpope/vim-fugitive'
+"git diff in sign column
+Plug 'airblade/vim-gitgutter'
 "quoting/parenthesizing/tagging made simple
 Plug 'tpope/vim-surround'
 "Replacement for 95% of grep - plugin for the Perl module / CLI script 'ack'
