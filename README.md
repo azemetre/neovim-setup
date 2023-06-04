@@ -1,5 +1,7 @@
 # my neovim setup
 
+**Please Note:** This is no longer being maintained, please refer to my [dotfiles](https://github.com/azemetre/dotfiles) for a modern approach to my neovim setup.
+
 ## prerequisites
 ### [homebrew](https://brew.sh/)
 If you don't have homebrew installed for macOS, please install it with the following command:
